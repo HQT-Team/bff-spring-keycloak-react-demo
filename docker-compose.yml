@@ -1,0 +1,48 @@
+version: "3.8"
+services:
+  nginx:
+    image:  nginx:1.23.4
+    restart: unless-stopped
+    volumes:
+      - ./nginx/templates:/etc/nginx/templates
+      - ./nginx/conf/custom_proxy_settings.conf:/etc/nginx/conf.d/custom_proxy_settings.conf
+    ports:
+      - "80:80"
+  identity:
+    image: quay.io/keycloak/keycloak:21.1.0
+    command:
+      - start-dev
+      - --import-realm
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_PROXY: passthrough
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
+      KC_DB_USERNAME: admin
+      KC_DB_PASSWORD: admin
+      KC_HTTP_PORT: 80
+    volumes:
+      - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json
+  postgres:
+    image: postgres:15.2-alpine
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres_init.sql:/docker-entrypoint-initdb.d/postgres_init.sql
+      - postgres:/var/lib/postgresql/data
+    command: postgres -c 'max_connections=500'
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@hqt.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+
+volumes:
+  postgres:
+  pgadmin:
