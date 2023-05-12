@@ -1,0 +1,32 @@
+server:
+  port: 8080
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: backoffice-bff
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            issuer-uri: http://identity/realms/HQT
+            user-name-attribute: preferred_username
+        registration:
+          api-client:
+            provider: keycloak
+            client-id: backoffice-bff-client
+            client-secret: it1ZVuSIEVLhw5FtrAl4TTwaUzoyqLfb
+            authorization-grant-type: authorization_code
+            scope: openid, profile, email, roles
+  cloud:
+    gateway:
+      routes:
+        - id: api_product
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/product/**
+          filters:
+            - RewritePath=/api/(?<segment>.*), /$\{segment}
+            - TokenRelay=
