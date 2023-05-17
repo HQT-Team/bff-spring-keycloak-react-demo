@@ -11,3 +11,14 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: http://identity/realms/HQT
+
+springdoc:
+  packages-to-scan: com.hqt.product
+  swagger-ui:
+    path: /swagger-ui
+    oauth:
+      use-pkce-with-authorization-code-grant: true
+      client-id: swagger-ui
+  oauthflow:
+    authorization-url: http://identity/realms/HQT/protocol/openid-connect/auth
+    token-url: http://identity/realms/HQT/protocol/openid-connect/token
