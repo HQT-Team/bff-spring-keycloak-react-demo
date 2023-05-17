@@ -30,3 +30,7 @@ spring:
           filters:
             - RewritePath=/api/(?<segment>.*), /$\{segment}
             - TokenRelay=
+        - id: react
+          uri: http://127.0.0.1:5173
+          predicates:
+            - Path=/**

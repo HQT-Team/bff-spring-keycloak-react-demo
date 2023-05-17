@@ -27,7 +27,8 @@ public class SecurityConfig {
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         http
                 .authorizeExchange()
-                .anyExchange().hasAnyRole("admin", "user")
+                .pathMatchers("/api/**").hasAnyRole("admin", "user")
+                .anyExchange().permitAll()
                 .and()
                 .oauth2Login()
                 .and()
