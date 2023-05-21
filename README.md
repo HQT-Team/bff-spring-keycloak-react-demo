@@ -13,7 +13,7 @@ This is a demo project to show how BFF Architecture works and authenticate user 
 - ReactJS
 
 ### Local development architecture
-![Local development architecture]()
+![Local development architecture](https://github.com/HQT-Team/bff-spring-keycloak-react-demo/blob/main/architecture-local.png)
 
 ### Getting started
 1. Get the latest source code
